@@ -1,0 +1,77 @@
+#! /usr/bin/env python3
+
+from scripts.tmux import set_global, set_window_global
+
+
+def make_style(content, bg=None, fg=None, bold=False):
+    styles = []
+
+    if bg:
+        styles.append(f"bg={bg}")
+
+    if fg:
+        styles.append(f"fg={fg}")
+
+    if bold:
+        styles.append("bold")
+
+    if (styles.__len__() > 0):
+        style = ", ".join(styles)
+        return f"#[{style}]{content}"
+
+    return content
+
+
+def pane_status(col1, col2, bold=False):
+    sections = []
+    sections.append(make_style(left, bg=col1, fg=background, bold=bool(bold)))
+    sections.append(make_style(" #I | ", bg=col1, fg=col2, bold=bool(bold)))
+    sections.append(make_style("#W ", fg=col2, bold=bool(bold)))
+    sections.append(make_style(left, bg=background, fg=col1, bold=bool(bold)))
+
+    return "".join(sections)
+
+
+def pane_left(col1, col2, bold=False):
+    sections = []
+    sections.append(make_style(" #{b:pane_current_path} ", bg=col1, fg=col2, bold=bool(bold)))
+    sections.append(make_style(left, bg=background, fg=col1, bold=bool(bold)))
+
+    return "".join(sections)
+
+
+def pane_right(col1, col2, bold=False):
+    sections = []
+    sections.append(make_style(right, bg=background, fg=col1, bold=bool(bold)))
+    sections.append(make_style(" #S ", bg=col1, fg=col2, bold=bool(bold)))
+    sections.append(make_style(right, bg=col1, fg=background))
+    sections.append(make_style(right, bg=background, fg=col1))
+    sections.append(make_style(" #H ", bg=col1, fg=col2, bold=bool(bold)))
+
+    return "".join(sections)
+
+
+left = ""
+right = ""
+
+primary = "#97CD2B"
+background = "#252621"
+background2 = "#454641"
+
+# Set the background and foreground colors of the statusline
+set_global("status-style", f"bg={background},fg={primary}")
+set_global("window-status-separator", "")
+
+# Set the left side of the statusline
+set_global("status-left", pane_left(primary, background))
+set_global("status-left-length", "60")
+
+# Set the right side of the statusline
+set_global("status-right", pane_right(primary, background))
+
+# Set the window list colors and style
+set_window_global("window-status-style", f"bg={background},fg={primary}")
+set_window_global("window-status-format", pane_status(background2, primary, True))
+
+set_window_global("window-status-current-style", f"bg={primary},fg={primary}")
+set_window_global("window-status-current-format", pane_status(primary, background, True))
