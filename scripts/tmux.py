@@ -11,7 +11,7 @@ def set_window_global(option, value):
 
 def get_option(option: str, default="") -> str:
     proc = simple_proc(["tmux", "show-option", "-gqv", f"@maatwerklijn_{option}"])
-    text = simple_read(proc).decode("utf-8")
+    text = simple_read(proc).decode("utf-8").rstrip('\n')
     if not bool(text):
         return default
     if text == "default":
