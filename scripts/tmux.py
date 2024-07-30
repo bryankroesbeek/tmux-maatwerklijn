@@ -14,5 +14,12 @@ def get_option(option: str, default="") -> str:
     text = simple_read(proc).decode("utf-8")
     if not bool(text):
         return default
+    if text == "default":
+        return default
 
     return text
+
+
+def get_theme(default="#ffffff"):
+    theme = get_option("theme", default)
+    return theme
