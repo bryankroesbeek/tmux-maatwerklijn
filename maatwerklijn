@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-from scripts.tmux import set_global, set_window_global
+from scripts.tmux import set_global, set_window_global, get_option
 
 
 def make_style(content, bg=None, fg=None, bold=False):
@@ -54,7 +54,7 @@ def pane_right(col1, col2, bold=False):
 left = ""
 right = ""
 
-primary = "#97CD2B"
+primary = get_option("theme", default="#97cd2b")
 background = "#252621"
 background2 = "#454641"
 
