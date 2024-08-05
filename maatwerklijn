@@ -70,6 +70,15 @@ set_global("status-left-length", "60")
 # Set the right side of the statusline
 set_global("status-right", pane_right(primary, background))
 
+
+set_global("pane-border-style", f"fg={background}")
+set_global("pane-active-border-style", f"fg={primary}")
+
+set_global("message-command-style", f"fg={primary} bg={background}")
+set_global("message-style", f"fg={primary} bg={background}")
+set_global("mode-style", f"fg={primary} bg={background}")
+
+
 # Set the window list colors and style
 set_window_global("window-status-style", f"bg={background},fg={primary}")
 set_window_global("window-status-format", pane_status(background2, primary, True))
