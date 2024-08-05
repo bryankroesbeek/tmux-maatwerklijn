@@ -26,7 +26,10 @@ def make_style(content, bg=None, fg=None, bold=False):
 
 def pane_status(col1, col2, bold=False):
     sections = []
-    sections.append(make_style(left, bg=col1, fg=background, bold=bool(bold)))
+    if not separator.is_set():
+        sections.append(make_style(" ", bg=background, bold=bool(bold)))
+    else:
+        sections.append(make_style(left, bg=col1, fg=background, bold=bool(bold)))
     sections.append(make_style(" #I | ", bg=col1, fg=col2, bold=bool(bold)))
     sections.append(make_style("#W ", fg=col2, bold=bool(bold)))
     sections.append(make_style(left, bg=background, fg=col1, bold=bool(bold)))
@@ -47,6 +50,9 @@ def pane_right(col1, col2, bold=False):
     sections.append(make_style(right, bg=background, fg=col1, bold=bool(bold)))
     sections.append(make_style(" #S ", bg=col1, fg=col2, bold=bool(bold)))
     sections.append(make_style(right, bg=col1, fg=background))
+    if not separator.is_set():
+        sections.append(make_style(" ", bg=background, fg=col1))
+
     sections.append(make_style(right, bg=background, fg=col1))
     sections.append(make_style(" #H ", bg=col1, fg=col2, bold=bool(bold)))
 

@@ -31,7 +31,7 @@ class Separator:
         if self.style == Style.SLICED:
             return SLICED_LEFT
 
-        return " "
+        return ""
 
     def right(self):
         if self.style == Style.ARROW:
@@ -43,7 +43,10 @@ class Separator:
         if self.style == Style.SLICED:
             return SLICED_RIGHT
 
-        return " "
+        return ""
+
+    def is_set(self):
+        return self.style != Style.NONE
 
 def get_separator() -> Separator:
     style_option = get_option("separator_style", "0")
