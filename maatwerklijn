@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 
+from options.separator import get_separator
 from scripts.theme import get_background, get_background_inactive, get_color
 from scripts.tmux import set_global, set_window_global
 
@@ -51,9 +52,9 @@ def pane_right(col1, col2, bold=False):
 
     return "".join(sections)
 
-
-left = ""
-right = ""
+separator = get_separator()
+left = separator.left()
+right = separator.right()
 
 primary = get_color()
 background = get_background()
