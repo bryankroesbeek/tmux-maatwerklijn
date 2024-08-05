@@ -18,8 +18,3 @@ def get_option(option: str, default="") -> str:
         return default
 
     return text
-
-
-def get_theme(default="#ffffff"):
-    theme = get_option("theme", default)
-    return theme

@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
-from scripts.tmux import get_theme, set_global, set_window_global
+from scripts.theme import get_background, get_background_inactive, get_color
+from scripts.tmux import set_global, set_window_global
 
 
 def make_style(content, bg=None, fg=None, bold=False):
@@ -54,9 +55,9 @@ def pane_right(col1, col2, bold=False):
 left = ""
 right = ""
 
-primary = get_theme()
-background = "#252621"
-background2 = "#454641"
+primary = get_color()
+background = get_background()
+background2 = get_background_inactive()
 
 # Set the background and foreground colors of the statusline
 set_global("status-style", f"bg={background},fg={primary}")
