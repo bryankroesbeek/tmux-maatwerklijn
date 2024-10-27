@@ -10,7 +10,7 @@ def simple_read(proc: Popen) -> bytes:
     return output
 
 
-def make_style(content, bg=None, fg=None, bold=False):
+def set_style(bg=None, fg=None, bold=False):
     styles = []
 
     if bg:
@@ -24,6 +24,11 @@ def make_style(content, bg=None, fg=None, bold=False):
 
     if (styles.__len__() > 0):
         style = ", ".join(styles)
-        return f"#[{style}]{content}"
+        return f"#[{style}]"
 
-    return content
+    return ""
+
+def make_style(content, bg=None, fg=None, bold=False):
+    style = set_style(bg=bg, fg=fg, bold=bold)
+    return f"{style}{content}"
+
