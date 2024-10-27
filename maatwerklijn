@@ -1,28 +1,10 @@
 #! /usr/bin/env python3
 
 from options.separator import get_separator
+from scripts.pane import Pane, Panes
 from scripts.theme import get_background, get_background_inactive, get_color
 from scripts.tmux import set_global, set_window_global
-
-
-def make_style(content, bg=None, fg=None, bold=False):
-    styles = []
-
-    if bg:
-        styles.append(f"bg={bg}")
-
-    if fg:
-        styles.append(f"fg={fg}")
-
-    if bold:
-        styles.append("bold")
-
-    if (styles.__len__() > 0):
-        style = ", ".join(styles)
-        return f"#[{style}]{content}"
-
-    return content
-
+from scripts.utils import make_style
 
 def pane_status(col1, col2, bold=False):
     sections = []
@@ -36,28 +18,6 @@ def pane_status(col1, col2, bold=False):
 
     return "".join(sections)
 
-
-def pane_left(col1, col2, bold=False):
-    sections = []
-    sections.append(make_style(" #{b:pane_current_path} ", bg=col1, fg=col2, bold=bool(bold)))
-    sections.append(make_style(left, bg=background, fg=col1, bold=bool(bold)))
-
-    return "".join(sections)
-
-
-def pane_right(col1, col2, bold=False):
-    sections = []
-    sections.append(make_style(right, bg=background, fg=col1, bold=bool(bold)))
-    sections.append(make_style(" #S ", bg=col1, fg=col2, bold=bool(bold)))
-    sections.append(make_style(right, bg=col1, fg=background))
-    if not separator.is_set():
-        sections.append(make_style(" ", bg=background, fg=col1))
-
-    sections.append(make_style(right, bg=background, fg=col1))
-    sections.append(make_style(" #H ", bg=col1, fg=col2, bold=bool(bold)))
-
-    return "".join(sections)
-
 separator = get_separator()
 left = separator.left()
 right = separator.right()
@@ -66,16 +26,23 @@ primary = get_color()
 background = get_background()
 background2 = get_background_inactive()
 
+panes_left = Panes(foreground=primary, background=background)
+panes_left.add(Pane("path", "#{b:pane_current_path}", background=primary, foreground=background))
+
+panes_right = Panes(foreground=primary, background=background)
+panes_right.add(Pane("path", "#S", background=primary, foreground=background))
+panes_right.add(Pane("path", "#H", background=primary, foreground=background))
+
 # Set the background and foreground colors of the statusline
 set_global("status-style", f"bg={background},fg={primary}")
 set_global("window-status-separator", "")
 
 # Set the left side of the statusline
-set_global("status-left", pane_left(primary, background))
+set_global("status-left", panes_left.print("left", separator))
 set_global("status-left-length", "60")
 
 # Set the right side of the statusline
-set_global("status-right", pane_right(primary, background))
+set_global("status-right", panes_right.print("right", separator))
 
 
 set_global("pane-border-style", f"fg={background}")
