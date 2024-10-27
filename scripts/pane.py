@@ -29,10 +29,10 @@ class Panes:
         default_style = make_style("", bg=self.background, fg=self.foreground)
         sep = separator.get(position, default=" ")
 
-        styles: list[str] = []
+        styled_panes: list[list[str]] = []
         for pane in self.panes:
             if not separator.is_set():
-                styles.append(pane.print(pad=True))
+                styled_panes.append([pane.print(pad=True)])
                 continue
 
             style: list[str] = []
@@ -48,7 +48,21 @@ class Panes:
             if position == "right":
                 style.append(make_style(sep, fg=self.background, bg=pane.background))
 
-            styles.append("".join(style))
+            styled_panes.append(style)
+
+        styles: list[str] = []
+        pane_count = len(styled_panes)
+        for index in range(pane_count):
+            if not separator.is_set():
+                styles.append("".join(styled_panes[index]))
+                continue
+            if index == 0 and position == "left":
+                styles.append("".join(styled_panes[index][1:]))
+                continue
+            if index == pane_count - 1 and position == "right":
+                styles.append("".join(styled_panes[index][:-1]))
+                continue
+            styles.append("".join(styled_panes[index]))
 
         spacing = "" if separator.is_set() else " "
         return f"{default_style}{spacing}".join(styles)
