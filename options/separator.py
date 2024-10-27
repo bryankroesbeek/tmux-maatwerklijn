@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Literal
 
 from scripts.tmux import get_option
 
@@ -20,6 +21,16 @@ class Style(Enum):
 class Separator:
     def __init__(self, style: Style) -> None:
         self.style: Style = style
+
+    def get(self, position: Literal["left", "right"], default = " "):
+        if not self.is_set():
+            return default
+
+        if position == "left":
+            return self.left()
+
+        if position == "right":
+            return self.right()
 
     def left(self):
         if self.style == Style.ARROW:

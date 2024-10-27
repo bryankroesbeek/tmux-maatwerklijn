@@ -27,10 +27,7 @@ class Panes:
 
     def print(self, position: Literal["left", "right"], separator: Separator):
         default_style = make_style("", bg=self.background, fg=self.foreground)
-        sep = " "
-        if separator.is_set():
-            sep = separator.left() if position == "left" else sep
-            sep = separator.right() if position == "right" else sep
+        sep = separator.get(position, default=" ")
 
         styles: list[str] = []
         for pane in self.panes:
